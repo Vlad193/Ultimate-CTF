@@ -97,13 +97,7 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 		if (name == "beer")
 		{
 			this.getSprite().PlaySound("/Gulp.ogg");
-			if (isServer())
-			{
-				callerBlob.set_f32("COFFEE POWER", callerBlob.get_f32("COFFEE POWER")+1.0f);
-				//callerBlob.server_SetHealth(callerBlob.getHealth()/2);
-				//getInitialHealth()
-				//callerBlob.setInitialHealth(10.0f);
-			}
+			callerBlob.set_f32("COFFEE POWER", callerBlob.get_f32("COFFEE POWER")+1.0f);
 		}
 	}
 }
