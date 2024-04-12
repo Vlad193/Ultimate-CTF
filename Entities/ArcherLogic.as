@@ -27,6 +27,7 @@ const int TRIPLESHOT_CHARGE = 89; // 100 (x+89) in reality
 void onInit(CBlob@ this)
 {
 	ArcherInfo archer;
+	this.set_f32("COFFEE POWER", 1.0f);
 	this.set("archerInfo", @archer);
 
 	this.set_s8("charge_time", 0);
@@ -491,7 +492,7 @@ void ManageBow(CBlob@ this, ArcherInfo@ archer, RunnerMoveVars@ moveVars)
 		{
 			charge_time++;
 
-			if (charge_time > ArcherParams::ready_time)
+			if (charge_time > ArcherParams::ready_time/this.get_f32("COFFEE POWER"))
 			{
 				charge_time = 1;
 				charge_state = ArcherParams::charging;
@@ -514,7 +515,7 @@ void ManageBow(CBlob@ this, ArcherInfo@ archer, RunnerMoveVars@ moveVars)
 				charge_time++;
 			}
 
-			if (charge_time >= TRIPLESHOT_CHARGE)
+			if (charge_time >= TRIPLESHOT_CHARGE/this.get_f32("COFFEE POWER"))
 			{
 				// Legolas state
 
@@ -690,6 +691,11 @@ void ManageBow(CBlob@ this, ArcherInfo@ archer, RunnerMoveVars@ moveVars)
 
 void onTick(CBlob@ this)
 {
+	//COFFEE DEBUFF
+	float maxHealth = this.getInitialHealth()/this.get_f32("COFFEE POWER");
+	if (this.getHealth()>maxHealth){
+		this.server_SetHealth(maxHealth);
+	}
 	ArcherInfo@ archer;
 	if (!this.get("archerInfo", @archer))
 	{
@@ -820,11 +826,11 @@ void ClientFire(CBlob@ this, const s8 charge_time, const bool hasarrow, const u8
 	{
 		f32 arrowspeed;
 
-		if (charge_time < MIDSHOT_CHARGE)
+		if (charge_time < MIDSHOT_CHARGE/this.get_f32("COFFEE POWER"))
 		{
 			arrowspeed = ArcherParams::shoot_max_vel * (1.0f / 3.0f);
 		}
-		else if (charge_time < FULLSHOT_CHARGE)
+		else if (charge_time < FULLSHOT_CHARGE/this.get_f32("COFFEE POWER"))
 		{
 			arrowspeed = ArcherParams::shoot_max_vel * (4.0f / 5.0f);
 		}

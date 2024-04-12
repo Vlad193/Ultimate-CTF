@@ -76,7 +76,7 @@ void onDie(CBlob@ this)
 {
 	this.getSprite().SetEmitSoundPaused(true);
 	if (this.get_u16("clone") == 0) return;
-	for(int i = 0; i < 3; i++){
+	for(int i = 0; i < 2; i++){
 		CBlob@ mina = server_CreateBlobNoInit("bombc");
 		if (mina !is null)
 		{

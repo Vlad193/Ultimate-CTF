@@ -169,14 +169,14 @@ void onTick(CBlob@ this)
 			{
 				shape.SetGravityScale(0.1f);
 				if (this.hasTag("stone arrow")){
-					shape.SetGravityScale(10.0f);
+					shape.SetGravityScale(5.0f);
 				}
 			}
 			else
 			{
 				shape.SetGravityScale(Maths::Min(1.0f, 1.0f / (shape.vellen * 0.1f)));
 				if (this.hasTag("stone arrow")){
-					shape.SetGravityScale(10.0f);
+					shape.SetGravityScale(5.0f);
 				}
 			}
 

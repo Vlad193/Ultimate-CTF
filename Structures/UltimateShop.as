@@ -27,19 +27,38 @@ void onInit(CBlob@ this)
 
 	// CLASS
 	this.set_Vec2f("class offset", Vec2f(-6, 0));
-	this.set_string("required class", "ladder");
+	this.set_string("required class", "builder");
+	AddIconToken("$StoneArrows$", "Materials.png", Vec2f(16, 16), 32);
+	AddIconToken("$MineArrows$", "Materials.png", Vec2f(16, 16), 33);
+	AddIconToken("$FOOD$", "UltimateShop.png", Vec2f(16, 16), 16);
+	AddIconToken("$BOMBC$", "UltimateShop.png", Vec2f(16, 16), 17);
+	AddIconToken("$ANGRYKEG$", "UltimateShop.png", Vec2f(16, 16), 18);
+	AddIconToken("$BOMBER$", "UltimateShop.png", Vec2f(16, 16), 19);
 
 	{
-		ShopItem@ s = addShopItem(this, "Stone Arrows", "$mat_stone$", "mat_stonearrows", "Just stone in arrow?", true);
+		ShopItem@ s = addShopItem(this, "Stone Arrows", "$StoneArrows$", "mat_stonearrows", "Just stone in arrow?", true);
 		AddRequirement(s.requirements, "coin", "", "Coins", 30);
 	}
 	{
-		ShopItem@ s = addShopItem(this, "Mine Arrows", "$mine$", "mat_minearrows", "Delivered from HELL", true);
+		ShopItem@ s = addShopItem(this, "Mine Arrows", "$MineArrows$", "mat_minearrows", "Delivered from HELL", true);
+		AddRequirement(s.requirements, "coin", "", "Coins", 70);
+	}
+	{
+		ShopItem@ s = addShopItem(this, "Bomb???", "$BOMBC$", "bombc", "Why its costs 100 coins??", true);
 		AddRequirement(s.requirements, "coin", "", "Coins", 100);
 	}
 	{
-		ShopItem@ s = addShopItem(this, "Bomb???", "$bombc$", "bombc", "Why its costs 100 coins??", true);
-		AddRequirement(s.requirements, "coin", "", "Coins", 100);
+		ShopItem@ s = addShopItem(this, "Keg?", "$ANGRYKEG$", "angrykeg", "Its just keg, nothing wrong, yes?...", true);
+		AddRequirement(s.requirements, "coin", "", "Coins", 90);
+	}
+	{
+		ShopItem@ s = addShopItem(this, "Bomber", "$BOMBER$", "bomber", "Useful balloon", true);
+		AddRequirement(s.requirements, "coin", "", "Coins", 200);
+	}
+	{
+		ShopItem@ s = addShopItem(this, "ULTIMATUM FOOD", "$FOOD$", "beer", "Have you heard about the GLASS CANNON? Can stack. You lose it when die.", false);
+		s.spawnNothing = true;
+		AddRequirement(s.requirements, "coin", "", "Coins", 85);
 	}
 }
 
@@ -63,5 +82,28 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 	if (cmd == this.getCommandID("shop made item"))
 	{
 		this.getSprite().PlaySound("/ChaChing.ogg");
+		u16 caller, item;
+		string name;
+
+		if (!params.saferead_netid(caller) || !params.saferead_netid(item) || !params.saferead_string(name))
+		{
+			return;
+		}
+		CBlob@ callerBlob = getBlobByNetworkID(caller);
+		if (callerBlob is null)
+		{
+			return;
+		}
+		if (name == "beer")
+		{
+			this.getSprite().PlaySound("/Gulp.ogg");
+			if (isServer())
+			{
+				callerBlob.set_f32("COFFEE POWER", callerBlob.get_f32("COFFEE POWER")+1.0f);
+				//callerBlob.server_SetHealth(callerBlob.getHealth()/2);
+				//getInitialHealth()
+				//callerBlob.setInitialHealth(10.0f);
+			}
+		}
 	}
 }
