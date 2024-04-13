@@ -30,6 +30,7 @@ void onInit(CBlob@ this)
 	this.set_string("required class", "builder");
 	AddIconToken("$StoneArrows$", "Materials.png", Vec2f(16, 16), 32);
 	AddIconToken("$MineArrows$", "Materials.png", Vec2f(16, 16), 33);
+	AddIconToken("$KegArrows$", "Materials.png", Vec2f(16, 16), 34);
 	AddIconToken("$FOOD$", "UltimateShop.png", Vec2f(16, 16), 16);
 	AddIconToken("$BOMBC$", "UltimateShop.png", Vec2f(16, 16), 17);
 	AddIconToken("$ANGRYKEG$", "UltimateShop.png", Vec2f(16, 16), 18);
@@ -41,7 +42,13 @@ void onInit(CBlob@ this)
 	}
 	{
 		ShopItem@ s = addShopItem(this, "Mine Arrows", "$MineArrows$", "mat_minearrows", "Delivered from HELL", true);
-		AddRequirement(s.requirements, "coin", "", "Coins", 70);
+		AddRequirement(s.requirements, "blob", "mat_arrows", "Arrows", 1);
+		AddRequirement(s.requirements, "coin", "", "Coins", 60);
+	}
+	{
+		ShopItem@ s = addShopItem(this, "Keg Arrows", "$KegArrows$", "mat_kegarrows", "Now you've seen everything", true);
+		AddRequirement(s.requirements, "blob", "mat_stonearrows", "Stone Arrows", 1);
+		AddRequirement(s.requirements, "coin", "", "Coins", 120);
 	}
 	{
 		ShopItem@ s = addShopItem(this, "Bomb???", "$BOMBC$", "bombc", "Why its costs 100 coins??", true);
@@ -56,8 +63,9 @@ void onInit(CBlob@ this)
 		AddRequirement(s.requirements, "coin", "", "Coins", 200);
 	}
 	{
-		ShopItem@ s = addShopItem(this, "ULTIMATUM FOOD", "$FOOD$", "beer", "Have you heard about the GLASS CANNON? Can stack. You lose it when die.", false);
+		ShopItem@ s = addShopItem(this, "ULTIMATUM HEART", "$FOOD$", "beer", "Have you heard about the GLASS CANNON? Can stack. You lose it when die.", false);
 		s.spawnNothing = true;
+		AddRequirement(s.requirements, "blob", "heart", "Heart", 3);
 		AddRequirement(s.requirements, "coin", "", "Coins", 85);
 	}
 }

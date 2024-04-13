@@ -1126,6 +1126,7 @@ void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 	AddIconToken("$BombArrow$", "Entities/Characters/Archer/ArcherIcons.png", Vec2f(16, 32), 3, this.getTeamNum());
 	AddIconToken("$ArrowStone$", "Materials.png", Vec2f(16, 16), 32, this.getTeamNum());
 	AddIconToken("$ArrowMine$", "Materials.png", Vec2f(16, 16), 33, this.getTeamNum());
+	AddIconToken("$ArrowKeg$", "Materials.png", Vec2f(16, 16), 34, this.getTeamNum());
 
 	if (arrowTypeNames.length == 0)
 	{

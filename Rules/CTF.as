@@ -520,15 +520,21 @@ shared class CTFCore : RulesCore
 			Vec2f[] flagPlaces;
 
 			f32 auto_distance_from_edge = Maths::Min(map.tilemapwidth * 0.25f * 8.0f, 400.0f);
+			int bluePlace = 0;
+			int redPlace = 1;
+			if (XORRandom(3)==0){
+				bluePlace = 1;
+				redPlace = 0;
+			}
 
 			//blue flags
 			if (getMap().getMarkers("blue spawn", flagPlaces))
 			{
 				for (uint i = 0; i < flagPlaces.length; i++)
 				{
-					server_CreateBlob(flag_spawn_name(), 0, flagPlaces[i] + Vec2f(0, map.tilesize));
-					server_CreateBlob(flag_spawn_name(), 0, flagPlaces[i] + Vec2f(0, map.tilesize)); //#TEST1
-					server_CreateBlob(flag_spawn_name(), 0, flagPlaces[i] + Vec2f(0, map.tilesize));
+					server_CreateBlob(flag_spawn_name(), bluePlace, flagPlaces[i] + Vec2f(0, map.tilesize));
+					server_CreateBlob(flag_spawn_name(), bluePlace, flagPlaces[i] + Vec2f(0, map.tilesize*2)); //#TEST1
+					server_CreateBlob(flag_spawn_name(), bluePlace, flagPlaces[i] + Vec2f(0, map.tilesize*3));
 				}
 
 				flagPlaces.clear();
@@ -546,9 +552,9 @@ shared class CTFCore : RulesCore
 			{
 				for (uint i = 0; i < flagPlaces.length; i++)
 				{
-					server_CreateBlob(flag_spawn_name(), 1, flagPlaces[i] + Vec2f(0, map.tilesize));
-					server_CreateBlob(flag_spawn_name(), 1, flagPlaces[i] + Vec2f(0, map.tilesize)); //#TEST1
-					server_CreateBlob(flag_spawn_name(), 1, flagPlaces[i] + Vec2f(0, map.tilesize));
+					server_CreateBlob(flag_spawn_name(), redPlace, flagPlaces[i] + Vec2f(0, map.tilesize));
+					server_CreateBlob(flag_spawn_name(), redPlace, flagPlaces[i] + Vec2f(0, map.tilesize*2)); //#TEST1
+					server_CreateBlob(flag_spawn_name(), redPlace, flagPlaces[i] + Vec2f(0, map.tilesize*3));
 				}
 
 				flagPlaces.clear();

@@ -65,6 +65,9 @@ void onInit(CBlob@ this)
 	else if (arrowType == ArrowType::mine){
 		this.Tag("mine arrow");
 	}
+	else if (arrowType == ArrowType::keg){
+		this.Tag("keg arrow");
+	}
 
 	CSprite@ sprite = this.getSprite();
 	//set a random frame
@@ -102,10 +105,16 @@ void onInit(CBlob@ this)
 		if (arrowType == ArrowType::stone)
 			sprite.SetAnimation(anim);
 	}
-		{
+	{
 		Animation@ anim = sprite.addAnimation("mine arrow", 0, false);
 		anim.AddFrame(17);
 		if (arrowType == ArrowType::mine)
+			sprite.SetAnimation(anim);
+	}
+	{
+		Animation@ anim = sprite.addAnimation("keg arrow", 0, false);
+		anim.AddFrame(18);
+		if (arrowType == ArrowType::keg)
 			sprite.SetAnimation(anim);
 	}
 }
@@ -168,14 +177,14 @@ void onTick(CBlob@ this)
 			if (shape.vellen > 13.5f)
 			{
 				shape.SetGravityScale(0.1f);
-				if (this.hasTag("stone arrow")){
+				if (this.hasTag("stone arrow") || this.hasTag("keg arrow")){
 					shape.SetGravityScale(5.0f);
 				}
 			}
 			else
 			{
 				shape.SetGravityScale(Maths::Min(1.0f, 1.0f / (shape.vellen * 0.1f)));
-				if (this.hasTag("stone arrow")){
+				if (this.hasTag("stone arrow") || this.hasTag("keg arrow")){
 					shape.SetGravityScale(5.0f);
 				}
 			}
@@ -315,7 +324,7 @@ void onCollision(CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f point
 			dmg = getArrowDamage(this, vellen);
 		}
 
-		if (arrowType == ArrowType::water || arrowType == ArrowType::bomb || arrowType == ArrowType::mine)
+		if (arrowType == ArrowType::water || arrowType == ArrowType::bomb || arrowType == ArrowType::mine || arrowType == ArrowType::keg)
 		{
 			//move backwards a smidge for non-static bodies
 			//  we use the velocity instead of the normal because we
@@ -332,6 +341,10 @@ void onCollision(CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f point
 			}
 		}
 		if (arrowType == ArrowType::mine){
+			this.server_Die();
+			return;
+		}
+		if (arrowType == ArrowType::keg){
 			this.server_Die();
 			return;
 		}
@@ -690,6 +703,9 @@ void ArrowHitMap(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, u8 c
 	else if (arrowType == ArrowType::mine) {
 		this.server_Die();
 	}
+	else if (arrowType == ArrowType::keg) {
+		this.server_Die();
+	}
 	else if (arrowType == ArrowType::water)
 	{
 		this.server_Die();
@@ -853,6 +869,18 @@ void onDie(CBlob@ this)
 			mina.IgnoreCollisionWhileOverlapped(this);
 			mina.server_setTeamNum(this.getTeamNum());
 			mina.setPosition(this.getPosition());
+		}
+	}
+	if (arrowType == ArrowType::keg){
+		CBlob@ mina = server_CreateBlobNoInit("keg");
+		if (mina !is null)
+		{
+			mina.SetDamageOwnerPlayer(this.getPlayer());
+			mina.Init();
+			mina.IgnoreCollisionWhileOverlapped(this);
+			mina.server_setTeamNum(this.getTeamNum());
+			mina.setPosition(this.getPosition());
+			mina.SendCommand(mina.getCommandID("activate"));
 		}
 	}
 }

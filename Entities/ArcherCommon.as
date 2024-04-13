@@ -52,6 +52,7 @@ namespace ArrowType
 		bomb,
 		stone,
 		mine,
+		keg,
 		count
 	};
 }
@@ -149,7 +150,8 @@ const string[] arrowTypeNames = { "mat_arrows",
                                   "mat_firearrows",
                                   "mat_bombarrows",
 								  "mat_stonearrows",
-								  "mat_minearrows"
+								  "mat_minearrows",
+								  "mat_kegarrows"
                                 };
 
 const string[] arrowNames = { "Regular arrows",
@@ -157,7 +159,8 @@ const string[] arrowNames = { "Regular arrows",
                               "Fire arrows",
                               "Bomb arrow",
 							  "Stone arrow",
-							  "Mine arrow"
+							  "Mine arrow",
+							  "Keg arrow"
                             };
 
 const string[] arrowIcons = { "$Arrow$",
@@ -165,7 +168,8 @@ const string[] arrowIcons = { "$Arrow$",
                               "$FireArrow$",
                               "$BombArrow$",
 							  "$ArrowStone$",
-							  "$ArrowMine$"
+							  "$ArrowMine$",
+							  "$ArrowKeg$"
                             };
 
 
