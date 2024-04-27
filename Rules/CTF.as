@@ -187,6 +187,8 @@ shared class CTFSpawns : RespawnSystem
 
 		if (force) { return true; }
 
+		return true;
+
 		return info.can_spawn_time <= 0;
 	}
 
@@ -534,7 +536,8 @@ shared class CTFCore : RulesCore
 				{
 					server_CreateBlob(flag_spawn_name(), bluePlace, flagPlaces[i] + Vec2f(0, map.tilesize));
 					server_CreateBlob(flag_spawn_name(), bluePlace, flagPlaces[i] + Vec2f(0, map.tilesize*2)); //#TEST1
-					server_CreateBlob(flag_spawn_name(), bluePlace, flagPlaces[i] + Vec2f(0, map.tilesize*3));
+					CBlob@ a = server_CreateBlob(flag_spawn_name(), bluePlace, flagPlaces[i] + Vec2f(0, map.tilesize*3));
+					a.Tag("PLACE BEDROCK");
 				}
 
 				flagPlaces.clear();
@@ -554,7 +557,8 @@ shared class CTFCore : RulesCore
 				{
 					server_CreateBlob(flag_spawn_name(), redPlace, flagPlaces[i] + Vec2f(0, map.tilesize));
 					server_CreateBlob(flag_spawn_name(), redPlace, flagPlaces[i] + Vec2f(0, map.tilesize*2)); //#TEST1
-					server_CreateBlob(flag_spawn_name(), redPlace, flagPlaces[i] + Vec2f(0, map.tilesize*3));
+					CBlob@ a = server_CreateBlob(flag_spawn_name(), redPlace, flagPlaces[i] + Vec2f(0, map.tilesize*3));
+					a.Tag("PLACE BEDROCK");
 				}
 
 				flagPlaces.clear();

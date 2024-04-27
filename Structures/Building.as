@@ -71,7 +71,7 @@ void onInit(CBlob@ this)
 		AddRequirement(s.requirements, "blob", "mat_gold", "Gold", CTFCosts::tunnel_gold);
 	}
 	{
-		ShopItem@ s = addShopItem(this, "Ultimate Shop", getTeamIcon("ultimateshop", "UltimateShop.png", team_num, Vec2f(40, 24)), "ultimateshop", Descriptions::archershop);
+		ShopItem@ s = addShopItem(this, "Ultimate Shop", getTeamIcon("ultimateshop", "UltimateShop.png", team_num, Vec2f(40, 24)), "ultimatebuilding", Descriptions::archershop);
 		AddRequirement(s.requirements, "blob", "mat_wood", "Wood", CTFCosts::archershop_wood);
 	}
 	/*{
