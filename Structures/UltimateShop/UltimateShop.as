@@ -3,9 +3,10 @@
 #include "Requirements.as"
 #include "ShopCommon.as"
 #include "Descriptions.as"
-#include "CheckSpam.as"
 #include "Costs.as"
+#include "CheckSpam.as"
 #include "GenericButtonCommon.as"
+#include "TeamIconToken.as"
 
 void onInit(CBlob@ this)
 {
@@ -13,6 +14,9 @@ void onInit(CBlob@ this)
 
 	this.getSprite().SetZ(-50); //background
 	this.getShape().getConsts().mapCollisions = false;
+
+	ShopMadeItem@ onMadeItem = @onShopMadeItem;
+	this.set("onShopMadeItem handle", @onMadeItem);
 
 	this.Tag("has window");
 
@@ -97,7 +101,7 @@ void onInit(CBlob@ this)
 	}
 	if (T2){
 		ShopItem@ s = addShopItem(this, "Bomber", "$BOMBER$", "bomber", "Useful balloon.", true);
-		AddRequirement(s.requirements, "coin", "", "Coins", 200);
+		AddRequirement(s.requirements, "coin", "", "Coins", 300);
 	}
 	if (T3){
 		ShopItem@ s = addShopItem(this, "ULTIMATUM HEART", "$FOOD$", "beer", "Have you heard about the GLASS CANNON? Can stack. You lose it when die.", false);
@@ -109,18 +113,19 @@ void onInit(CBlob@ this)
 		ShopItem@ s = addShopItem(this, "Stone Chicken", "$StoneChicken$", "stonechicken", "It's just a chicken that ate too much stone.", true);
 		AddRequirement(s.requirements, "blob", "chicken", "Chicken", 1);
 		AddRequirement(s.requirements, "blob", "mat_stone", "Stone", 250);
-		AddRequirement(s.requirements, "coin", "", "Coins", 1);
+		AddRequirement(s.requirements, "coin", "", "Coins", 10);
 	}
 	if (T3){
 		ShopItem@ s = addShopItem(this, "Sky Chicken", "$SkyChicken$", "skychicken", "This is what will happen to you if you cross the upper barrier.", true);
 		AddRequirement(s.requirements, "blob", "chicken", "Chicken", 1);
-		AddRequirement(s.requirements, "coin", "", "Coins", 100);
+		AddRequirement(s.requirements, "coin", "", "Coins", 150);
 	}
 }
 
 void GetButtonsFor(CBlob@ this, CBlob@ caller)
 {
 	if (!canSeeButtons(this, caller)) return;
+
 	if (caller.getConfig() == this.get_string("required class"))
 	{
 		this.set_Vec2f("shop offset", Vec2f_zero);
@@ -132,27 +137,30 @@ void GetButtonsFor(CBlob@ this, CBlob@ caller)
 	this.set_bool("shop available", this.isOverlapping(caller));
 }
 
+void onShopMadeItem(CBitStream@ params)
+{
+	if (!isServer()) return;
+
+	u16 this_id, caller_id, item_id;
+	string name;
+
+	if (!params.saferead_u16(this_id) || !params.saferead_u16(caller_id) || !params.saferead_u16(item_id) || !params.saferead_string(name))
+	{
+		return;
+	}
+
+	CBlob@ caller = getBlobByNetworkID(caller_id);
+	if (caller is null) return;
+	if (name == "beer")
+	{
+		caller.set_f32("COFFEE POWER", caller.get_f32("COFFEE POWER")+1.0f);
+	}
+}
+
 void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 {
-	if (cmd == this.getCommandID("shop made item"))
+	if (cmd == this.getCommandID("shop made item client") && isClient())
 	{
 		this.getSprite().PlaySound("/ChaChing.ogg");
-		u16 caller, item;
-		string name;
-
-		if (!params.saferead_netid(caller) || !params.saferead_netid(item) || !params.saferead_string(name))
-		{
-			return;
-		}
-		CBlob@ callerBlob = getBlobByNetworkID(caller);
-		if (callerBlob is null)
-		{
-			return;
-		}
-		if (name == "beer")
-		{
-			this.getSprite().PlaySound("/Gulp.ogg");
-			callerBlob.set_f32("COFFEE POWER", callerBlob.get_f32("COFFEE POWER")+1.0f);
-		}
 	}
 }
